@@ -11,7 +11,7 @@ export default function StartupList(): ReactElement {
   }, [])
 
   const getStartupList = () => {
-    StartupHttpService.getAllStartups().then((startUpList: Startup[])=> {
+    StartupHttpService.getStartups().then((startUpList: Startup[])=> {
       setStartupList(startUpList)
     })
     .catch((err: Error) => {

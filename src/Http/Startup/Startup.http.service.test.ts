@@ -4,33 +4,30 @@ import { expectedStartup } from "./Startup.test-data";
 import { Startup } from "../../Types/Startup";
 import { StartupHttpService } from "./Startup.http.service";
 import StartupMapper from "./Startup.mapper";
+import StartupListMapper from "./StartupList.mapper";
 
 jest.mock("axios");
 jest.mock("./Startup.mapper");
 const axiosMock = axios as jest.Mocked<typeof axios>;
 const StartupMapperMock = StartupMapper as jest.Mocked<typeof StartupMapper>;
+const StartupListMapperMock = StartupListMapper as jest.Mocked<typeof StartupListMapper>;
 
 describe("StartupHttpService", () => {
   const expectedStartups = [expectedStartup, expectedStartup];
 
   describe("getStartups should", () => {
     it("should return startups", async () => {
-      axiosMock.get.mockResolvedValueOnce({ data: [{}, {}] });
-      StartupMapperMock.map
-        .mockReturnValueOnce(expectedStartups[0])
-        .mockReturnValueOnce(expectedStartups[1]);
-
+      axiosMock.get.mockResolvedValueOnce({ data: [expectedStartup, expectedStartup] });
       expect(await StartupHttpService.getStartups()).toEqual(expectedStartups);
     });
 
-    it("should call startup mapper and pass startup dto", async () => {
+    it("should call startuplist mapper and pass startup dto", async () => {
       axiosMock.get.mockResolvedValueOnce({
-        data: [expectedStartup],
+        data: [expectedStartups],
       });
-
+      const mapFunc = jest.spyOn(StartupListMapperMock, 'map')
       await StartupHttpService.getStartups();
-
-      expect(StartupMapper.map).toHaveBeenCalledWith(expectedStartup);
+      expect(mapFunc).toHaveBeenCalledWith([expectedStartups]);
     });
 
     it("should call axios with url", async () => {

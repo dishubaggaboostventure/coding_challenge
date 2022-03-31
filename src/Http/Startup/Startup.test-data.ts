@@ -148,7 +148,7 @@ export const expectedStartup: Startup = {
   files: [],
 };
 
-export const expectedStartupList: Startup[] = [
+export const expectedStartups: Startup[] = [
   {
     id: 1,
     dateCreated: new Date("2020-12-22T13:00:00.000Z"),
